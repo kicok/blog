@@ -7,33 +7,37 @@ import com.nanum.blog.model.UserRole;
 import com.nanum.blog.repository.RoleRepository;
 import com.nanum.blog.repository.UserRepository;
 import com.nanum.blog.repository.UserRoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 @RestController
 public class DummyControllerTest  {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    UserRoleRepository userRoleRepository;
+    public DummyControllerTest(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
+    }
 
     @PostMapping("/dummy/join")
+    @Transactional
     public String join(User user){
 
-        user = userRepository.save(user);
+        RoleEntity roleEntity =  roleRepository.findByName(RoleType.USER);
+        if(roleEntity == null) {
+            roleEntity = new RoleEntity();
+            roleEntity.setName(RoleType.USER);
+            roleEntity = roleRepository.save(roleEntity);
+        }
 
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setName(RoleType.USER.getMessage());
-        roleEntity = roleRepository.save(roleEntity);
+        user = userRepository.save(user);
 
         UserRole userRole = new UserRole();
         userRole.setUser(user);

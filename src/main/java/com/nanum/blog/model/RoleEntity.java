@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -24,7 +23,9 @@ public class RoleEntity {
     @OneToMany(mappedBy = "user")
     private List<UserRole> userRoleId;
 
+    // 데이터베이스에는 RoleType 이라는게 없으므로 EnumType.STRING 으로 타입을 지정해줌
+    @Enumerated(EnumType.STRING)
     @Column(unique=true)
-    private String name;
+    private RoleType name;
 
 }

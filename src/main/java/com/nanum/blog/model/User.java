@@ -1,15 +1,17 @@
 package com.nanum.blog.model;
 
 import com.nanum.blog.model.common.TimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+//@DynamicInsert //insert시에 null인 필드를 제외시켜준다.
+//@Data
+//@EqualsAndHashCode(callSuper=false)
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
