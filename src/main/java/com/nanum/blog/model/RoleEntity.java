@@ -1,5 +1,8 @@
 package com.nanum.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +19,12 @@ import java.util.List;
 @Table(name="role")
 public class RoleEntity {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<UserRole> userRoleId;
 

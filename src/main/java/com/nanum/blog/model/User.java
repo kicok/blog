@@ -1,5 +1,7 @@
 package com.nanum.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nanum.blog.model.common.TimeEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -35,6 +37,7 @@ public class User extends TimeEntity {
     /**
      * 권한 연계
      */
+    @JsonManagedReference
     @OneToMany(mappedBy = "user")
     private List<UserRole> roles;
 
