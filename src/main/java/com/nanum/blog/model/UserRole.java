@@ -1,8 +1,6 @@
 package com.nanum.blog.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,12 +17,14 @@ public class UserRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
+//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
-    @JsonManagedReference
+
+//  @JsonManagedReference // 이 코드의 주석을 풀면 순환참조가 발생한다.
     @ManyToOne
     @JoinColumn(name = "roleId")
     private RoleEntity role;
