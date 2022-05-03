@@ -53,7 +53,7 @@ public class DummyControllerTest  {
         return "회원가입 완료";
     }
 
-    // http://localhost:8080/blog/dummy/user/5
+    // http://localhost:8080/blog/dummy/user/2
     @GetMapping("/dummy/user/{id}")
     public User detail(@PathVariable int id){
         // findById(id) 는 Optional 을 리턴한다.
@@ -82,4 +82,44 @@ public class DummyControllerTest  {
         return user;
 
     }
+
+    // http://localhost:8080/blog/dummy/users
+    @GetMapping("/dummy/users")
+    public List<User> list(){
+        return userRepository.findAll();
+    }
+
+    @GetMapping("/dummy/user")
+    public Page<User> pageList(@PageableDefault(size = 1, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<User> pagingUser = userRepository.findAll(pageable);
+        List<User> users = pagingUser.getContent(); // contentt 부분만 가져옴(page관련 정보는 제외)
+        return pagingUser;
+    }
+
+
+    // http://localhost:8080/blog/dummy/user/1
+    @Transactional
+    @PutMapping("/dummy/user/{id}")
+    public User updateUser(@PathVariable int id, @RequestBody User requestUser){
+        User user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("사용자정보를 찾을수 없습니다"));
+
+        user.setPassword(requestUser.getPassword());
+        user.setEmail(requestUser.getEmail());
+
+        // dirty checking : 변경된 사항을 감지해서 자동으로 save 한다.
+        return user;
+
+//   더티체킹(Dirty Checking)이란 상태 변경 검사이다.
+//   JPA에서는 트랜잭션이 끝나는 시점에 변화가 있는 모든 엔티티 객체를 데이터베이스 반영한다.
+//   그렇기 때문에 값을 변경한 뒤, save 하지 않더라도 DB에 반영되는 것이다.
+//   이러한 상태 변경 검사의 대상은 영속성 컨텍스트가 관리하는 엔티티에만 적용된다.(준영속, 비영속된 객체X)
+//
+//   더티체킹(Dirty Checking) 원리:
+//    · 영속성 컨텍스트란 서버와 DB사이에 존재한다.
+//    · JPA는 엔티티를 영속성 컨텍스트에 보관할 때, 최초 상태를 복사해서 저장해둔다.(일종의 스냅샷)
+//    · 트랜잭션이 끝나고 flush할 때 스냅샷과 현재 엔티티를 비교해 변경된 엔티티를 찾아낸다.
+//    · JPA는 변경된 엔티티를 DB단에 반영하여 한번에 쿼리문을 날려준다.
+    }
+
+
 }
