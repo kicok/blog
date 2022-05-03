@@ -7,6 +7,7 @@ import com.nanum.blog.model.UserRole;
 import com.nanum.blog.repository.RoleRepository;
 import com.nanum.blog.repository.UserRepository;
 import com.nanum.blog.repository.UserRoleRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -121,5 +122,18 @@ public class DummyControllerTest  {
 //    · JPA는 변경된 엔티티를 DB단에 반영하여 한번에 쿼리문을 날려준다.
     }
 
+    @DeleteMapping("/dummy/user/{id}")
+    public String delete(@PathVariable int id){
+//        User user = userRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("삭제할 사용자가 존재하지 않습니다"));
+//        userRepository.delete(user);
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e){
+            return "삭제에 실패하였습니다. 해당 id는 존재하지 않습니다.";
+        }
+
+        //userRepository.deleteById(id);
+        return "삭제 되었습니다 : " + id;
+    }
 
 }
