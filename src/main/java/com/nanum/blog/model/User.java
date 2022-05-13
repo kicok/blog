@@ -37,7 +37,7 @@ public class User extends TimeEntity {
      */
 //    @Fetch(value = FetchMode.SELECT)
     @JsonManagedReference
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // { CascadeType.PERSIST, CascadeType.REMOVE }와 동일
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // { CascadeType.PERSIST, CascadeType.REMOVE }와 동일
     private List<UserRole> roles;
 
 }

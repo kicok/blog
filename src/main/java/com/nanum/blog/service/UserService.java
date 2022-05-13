@@ -42,6 +42,7 @@ public class UserService {
             userRole.setRole(roleEntity);
             userRoleRepository.save(userRole);
 
+            System.out.println(user.toString());
             return 1;
         }catch (Exception e){
             e.printStackTrace();

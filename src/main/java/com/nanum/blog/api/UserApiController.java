@@ -22,7 +22,8 @@ public class UserApiController {
         System.out.println("UserApiController: save 호출됨:" + user.toString());
 
         int result =  userService.join(user);
-      return new ResponseDto<Integer>(HttpStatus.OK, result);
+      return new ResponseDto<Integer>(HttpStatus.OK.value(), result);
+      // HttpStatus.OK 로 성공에 대한 결과만 리턴한다. 실패에 대한 리턴은 GlobalExceptionHandler 에서 대신한다.
 
     }
 }
