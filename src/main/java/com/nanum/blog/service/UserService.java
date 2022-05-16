@@ -8,8 +8,8 @@ import com.nanum.blog.repository.RoleRepository;
 import com.nanum.blog.repository.UserRepository;
 import com.nanum.blog.repository.UserRoleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 @Service
 public class UserService {
@@ -50,4 +50,12 @@ public class UserService {
             return -1;
         }
     }
+
+    @Transactional(readOnly = true) // select 할때 트랜잭션 시작, 서비스종료시에 트랜잭션 종료(정합성)
+    public User login(User user){
+//       return userRepository.login(user.getUsername(), user.getPassword());
+       return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
+    }
+
+
 }

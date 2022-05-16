@@ -16,6 +16,8 @@ spring:
 
   mustache:
     suffix: .html
+    expose-session-attributes: true
+
 
   jpa:
     open-in-view: true

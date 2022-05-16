@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 public class UserApiController {
 
@@ -25,5 +27,20 @@ public class UserApiController {
       return new ResponseDto<Integer>(HttpStatus.OK.value(), result);
       // HttpStatus.OK 로 성공에 대한 결과만 리턴한다. 실패에 대한 리턴은 GlobalExceptionHandler 에서 대신한다.
 
+    }
+
+    @PostMapping("/api/user/login")
+    public User login(@RequestBody User user, HttpSession session){
+        System.out.println("UserApiController: login 호출됨:" + user.toString());
+        User principal = userService.login(user);
+
+        if(principal!=null){
+            session.setAttribute("principal", principal);
+        }
+
+        return principal;
+        //System.out.println(principal.);
+
+       // return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 }
