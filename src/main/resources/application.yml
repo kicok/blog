@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /blog
+    context-path: / #  에서 / 로 변경함
     encoding:
       charset: UTF-8
       enabled: true

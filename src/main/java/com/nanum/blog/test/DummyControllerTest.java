@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Supplier;
 
 
 @RestController
@@ -54,7 +52,7 @@ public class DummyControllerTest  {
         return "회원가입 완료";
     }
 
-    // http://localhost:8080/blog/dummy/user/2
+    // http://localhost:8080/dummy/user/2
     @GetMapping("/dummy/user/{id}")
     public User detail(@PathVariable int id){
         // findById(id) 는 Optional 을 리턴한다.
@@ -84,7 +82,7 @@ public class DummyControllerTest  {
 
     }
 
-    // http://localhost:8080/blog/dummy/users
+    // http://localhost:8080/dummy/users
     @GetMapping("/dummy/users")
     public List<User> list(){
         return userRepository.findAll();
@@ -98,7 +96,7 @@ public class DummyControllerTest  {
     }
 
 
-    // http://localhost:8080/blog/dummy/user/1
+    // http://localhost:8080/dummy/user/1
     @Transactional
     @PutMapping("/dummy/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User requestUser){
