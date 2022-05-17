@@ -16,7 +16,7 @@ spring:
 
   mustache:
     suffix: .html
-    expose-session-attributes: true
+#    expose-session-attributes: true # session 인식여부 체크
 
 
   jpa:

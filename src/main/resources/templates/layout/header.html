@@ -14,21 +14,21 @@
 
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <a class="navbar-brand" href="/">Home</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" da ta-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
-            {{^principal}}
+            {{^princiapl}}
             <li class="nav-item">
-                <a class="nav-link" href="/loginForm">로그인</a>
+                <a class="nav-link" href="/auth/loginForm">로그인</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/joinForm">회원가입</a>
+                <a class="nav-link" href="/auth/joinForm">회원가입</a>
             </li>
-            {{/principal}}
+            {{/princiapl}}
 
-            {{#principal}}
+            {{#princiapl}}
             <li class="nav-item">
                 <a class="nav-link" href="/board/form">글쓰기</a>
             </li>
@@ -38,7 +38,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/logout">로그아웃</a>
             </li>
-            {{/principal}}
+            {{/princiapl}}
         </ul>
     </div>
 </nav>

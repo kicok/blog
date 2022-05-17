@@ -7,6 +7,7 @@ import com.nanum.blog.model.UserRole;
 import com.nanum.blog.repository.RoleRepository;
 import com.nanum.blog.repository.UserRepository;
 import com.nanum.blog.repository.UserRoleRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +18,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -34,6 +37,7 @@ public class UserService {
                 roleEntity = roleRepository.save(roleEntity);
             }
 
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user = userRepository.save(user);
 
             // userRole 내에 user 와 roleEntity 의 관계를 기록한다.
@@ -51,11 +55,11 @@ public class UserService {
         }
     }
 
-    @Transactional(readOnly = true) // select 할때 트랜잭션 시작, 서비스종료시에 트랜잭션 종료(정합성)
-    public User login(User user){
-//       return userRepository.login(user.getUsername(), user.getPassword());
-       return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
-    }
+//    @Transactional(readOnly = true) // select 할때 트랜잭션 시작, 서비스종료시에 트랜잭션 종료(정합성)
+//    public User login(User user){
+////       return userRepository.login(user.getUsername(), user.getPassword());
+//       return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
+//    }
 
 
 }
