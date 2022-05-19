@@ -9,6 +9,15 @@
     </div>
 </div>
 
+
+{{#principal}}
+    <span>name : {{ username }}</span>
+    {{#authorities}}
+        {{authority}} <br>
+    {{/authorities}}
+{{/principal}}
+
+
 {{>layout/footer }}
 
 

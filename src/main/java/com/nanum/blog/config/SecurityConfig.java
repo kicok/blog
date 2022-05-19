@@ -12,6 +12,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+//    private final PrincipalDetailsService principalDetailsService;
+//
+//    public SecurityConfig(PrincipalDetailsService principalDetailsService) {
+//        this.principalDetailsService = principalDetailsService;
+//    }
+//
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(principalDetailsService).passwordEncoder(passwordEncoder());
+//    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
        http.csrf().disable()
@@ -22,7 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                .authenticated()
                .and()
                .formLogin()
-               .loginPage("/auth/loginForm");
+               .loginPage("/auth/loginForm")
+               .loginProcessingUrl("/auth/loginProc")
+               .defaultSuccessUrl("/")
+               ;
 
 
     }

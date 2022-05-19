@@ -19,16 +19,16 @@
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
-            {{^princiapl}}
+            {{^principal}}
             <li class="nav-item">
                 <a class="nav-link" href="/auth/loginForm">로그인</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/auth/joinForm">회원가입</a>
             </li>
-            {{/princiapl}}
+            {{/principal}}
 
-            {{#princiapl}}
+            {{#principal}}
             <li class="nav-item">
                 <a class="nav-link" href="/board/form">글쓰기</a>
             </li>
@@ -38,7 +38,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/logout">로그아웃</a>
             </li>
-            {{/princiapl}}
+            {{/principal}}
         </ul>
     </div>
 </nav>

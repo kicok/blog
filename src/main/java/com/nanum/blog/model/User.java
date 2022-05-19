@@ -36,6 +36,7 @@ public class User extends TimeEntity {
      * 권한 연계
      */
 //    @Fetch(value = FetchMode.SELECT)
+    // fetch = FetchType.LAZY 일 경우에 failed to lazily initialize a collection of role: com.nanum.blog.model.User.roles, could not initialize proxy - no Session
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // { CascadeType.PERSIST, CascadeType.REMOVE }와 동일
     private List<UserRole> roles;

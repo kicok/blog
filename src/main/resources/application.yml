@@ -16,6 +16,9 @@ spring:
 
   mustache:
     suffix: .html
+    charset: "UTF-8"
+    content-type: "text/html; charset=UTF-8"
+
 #    expose-session-attributes: true # session 인식여부 체크
 
 
