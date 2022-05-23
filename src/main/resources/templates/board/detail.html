@@ -1,17 +1,20 @@
 {{> layout/header }}
 
 <div class="container">
-
+{{#board}}
     <button class="btn btn-light" onclick="history.back()">돌아가기</button>
     <button class="btn btn-warning" id="btn-update">수정</button>
-    <button class="btn btn-danger" id="btn-delete">삭제</button>
+    <button class="btn btn-danger" id="btn-delete" data-id="{{id}}">삭제</button>
     <br/><br/>
+    <div>
+        글번호 : <span><i>{{id}}</i></span>
+        작성자 : <span><i>{{user.username}}</i></span>
+    </div>
 
-{{#board}}
     <div>
         <h3>{{title}}</h3>
     </div>
-
+    <br/>
     <div>
         <div>{{{content}}}</div>
     </div>

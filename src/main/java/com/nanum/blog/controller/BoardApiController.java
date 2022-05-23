@@ -6,9 +6,7 @@ import com.nanum.blog.model.Board;
 import com.nanum.blog.service.BoardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BoardApiController {
@@ -26,5 +24,12 @@ public class BoardApiController {
 
         boardService.saveBoard(board,principalDetails.getUser());
        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    @DeleteMapping("/api/board/{id}")
+    public ResponseDto<Integer> deleteById(@PathVariable int id){
+        boardService.deleteById(id);
+
+        return new ResponseDto<>(HttpStatus.OK.value(), 1);
     }
 }
