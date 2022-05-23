@@ -28,4 +28,9 @@ public class BoardService {
     public Page<Board> list(Pageable pageable){
         return boardRepository.findAll(pageable);
     }
+
+    public Board findById(int id){
+        return boardRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 게시글 입니다 : " + id));
+    }
 }
