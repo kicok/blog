@@ -4,7 +4,9 @@
 {{#board}}
     <button class="btn btn-light" onclick="history.back()">돌아가기</button>
     <button class="btn btn-warning" id="btn-update">수정</button>
+    {{#isMine}}
     <button class="btn btn-danger" id="btn-delete" data-id="{{id}}">삭제</button>
+    {{/isMine}}
     <br/><br/>
     <div>
         글번호 : <span><i>{{id}}</i></span>

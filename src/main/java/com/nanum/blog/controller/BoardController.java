@@ -43,6 +43,9 @@ public class BoardController {
       Board board = boardService.findById(id);
       model.addAttribute("principal", principalDetails);
       model.addAttribute("board", boardService.findById(id));
+
+      // 내가 쓴글인지 여부
+      model.addAttribute("isMine", principalDetails.getUser().getId() == board.getUser().getId());
       return "board/detail";
     }
 
