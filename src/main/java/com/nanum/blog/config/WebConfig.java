@@ -1,5 +1,6 @@
 package com.nanum.blog.config;
 
+import com.nanum.blog.config.auth.AuthenticationArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -22,5 +23,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
         //리졸버 등록
         argumentResolvers.add( new PageableHandlerMethodArgumentResolver());
+        argumentResolvers.add(new AuthenticationArgumentResolver());
     }
 }

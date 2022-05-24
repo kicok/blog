@@ -33,6 +33,10 @@ spring:
     properties:
       hibernate.format_sql: true
 
+#  devtools:
+#    restart:
+#      enabled: false
+
 
 
 #      properties:

@@ -1,5 +1,7 @@
 package com.nanum.blog.controller;
 
+import com.nanum.blog.config.auth.Annotation.AuthUser;
+import com.nanum.blog.config.auth.PrincipalDetails;
 import com.nanum.blog.model.Board;
 import com.nanum.blog.service.BoardService;
 import org.springframework.data.domain.Page;
@@ -21,10 +23,12 @@ public class BoardController {
     }
 
     @GetMapping({"", "/"})
-    public String index(Model model, @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
+    public String index(@AuthUser PrincipalDetails principalDetails, Model model, @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
 
 
         Page<Board>  boards = boardService.list(pageable);
+
+        model.addAttribute("principal", principalDetails);
 
         model.addAttribute("boards", boards.getContent());
         model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
@@ -35,7 +39,9 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public String findById(@PathVariable int id, Model model){
+    public String findById(@PathVariable int id, Model model, @AuthUser PrincipalDetails principalDetails){
+      Board board = boardService.findById(id);
+      model.addAttribute("principal", principalDetails);
       model.addAttribute("board", boardService.findById(id));
       return "board/detail";
     }
