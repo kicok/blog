@@ -49,6 +49,15 @@ public class BoardController {
       return "board/detail";
     }
 
+    // User 권한 필요
+    @GetMapping("/board/{id}/updateForm")
+    public String updateForm(@PathVariable int id, @AuthUser PrincipalDetails principalDetails, Model model){
+
+        model.addAttribute("principal", principalDetails);
+        model.addAttribute("board", boardService.findById(id));
+
+        return "board/updateForm";
+    }
 
     // User 권한 필요
     @GetMapping("/board/saveForm")

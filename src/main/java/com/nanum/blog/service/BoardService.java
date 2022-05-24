@@ -25,6 +25,16 @@ public class BoardService {
         boardRepository.save(board);
     }
 
+    @Transactional
+    public void updateBoard(int id, Board requestBoard){
+        Board board = boardRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("게시글이 존재하지 않습니다."));
+
+        board.setTitle(requestBoard.getTitle());
+        board.setContent(requestBoard.getContent());
+        //함수가 종료되면 더티체킹으로 자동으로 수정이 된다.
+    }
+
     @Transactional(readOnly = true)
     public Page<Board> list(Pageable pageable){
         return boardRepository.findAll(pageable);
