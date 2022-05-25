@@ -7,6 +7,7 @@ import com.nanum.blog.model.UserRole;
 import com.nanum.blog.repository.RoleRepository;
 import com.nanum.blog.repository.UserRepository;
 import com.nanum.blog.repository.UserRoleRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +54,26 @@ public class UserService {
             System.out.println("UserService: 회원가입 실패: " + e.getMessage());
             return -1;
         }
+    }
+
+    @Transactional
+    public void update(User user){
+        // 수정시에는 영속성 컨텍스트 User 오브젝트를 영속화시키고, 영속화된 User 오브젝트를 수정
+        // select를 해서 User오브젝트를 DB로 부터 가져오는 이유는 영속화를 하기 위해서!!
+        // 영속화된 오브젝트를 변경하면 자동으로 DB에 update문을 날려줌.
+        User persistanceUser = userRepository.findById(user.getId())
+                .orElseThrow(()->new UsernameNotFoundException("회원이 존재하지 않습니다."));
+
+        persistanceUser.setEmail(user.getEmail());
+        persistanceUser.setNickname(user.getNickname());
+
+        String rawPassword = user.getPassword();
+        if(rawPassword!=null && rawPassword.length() >= 4){
+            persistanceUser.setPassword(passwordEncoder.encode(rawPassword));
+        }
+
+        // 회원수정 함수 종료시 = 서비스 종료 = 트랜잭션 종료 = commit 이 자동으로 됨.
+        // 영속화된 persistanceUser 객체의 변화가 감지되면 더티체킹이 되어 update문을 날려줌.
     }
 
 //    @Transactional(readOnly = true) // select 할때 트랜잭션 시작, 서비스종료시에 트랜잭션 종료(정합성)

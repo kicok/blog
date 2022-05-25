@@ -1,5 +1,6 @@
 package com.nanum.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nanum.blog.model.common.TimeEntity;
 import lombok.*;
@@ -25,11 +26,15 @@ public class User extends TimeEntity {
     @Column(nullable = false, length = 30, unique = true)
     private String username;
 
+    @JsonIgnore
     @Column(nullable = false, length = 100)
     private String password;
 
     @Column(nullable = false, length = 50)
     private String email;
+
+    @Column(nullable = false, length = 30)
+    private String nickname;
 
 
     /**

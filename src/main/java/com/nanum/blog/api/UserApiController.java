@@ -5,6 +5,7 @@ import com.nanum.blog.model.User;
 import com.nanum.blog.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +26,12 @@ public class UserApiController {
       return new ResponseDto<Integer>(HttpStatus.OK.value(), result);
       // HttpStatus.OK 로 성공에 대한 결과만 리턴한다. 실패에 대한 리턴은 GlobalExceptionHandler 에서 대신한다.
 
+    }
+
+    @PutMapping("/user")
+    public ResponseDto<Integer> update(@RequestBody User user){
+        userService.update(user);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
 //    @PostMapping("/api/user/login")
