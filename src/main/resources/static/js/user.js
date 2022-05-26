@@ -42,12 +42,14 @@ let index = {
 
             let data = {
                 id: $("#id").val(),
+                username: $("#username").val(),
                 password: $("#password").val(),
                 nickname: $("#nickname").val(),
                 email : $("#email").val()
             }
 
             console.log(data);
+
             $.ajax({
                 type: "PUT",
                 url: "/user",
