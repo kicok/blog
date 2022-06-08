@@ -4,21 +4,32 @@ import com.nanum.blog.model.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 @Data
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
     private final User user;
+    private Map<String, Object> attributes; // Oauth 로그인을 할때 PrincipalOauth2UserService 에서   프로필 값을 통으로 받아온다.
 
+    // 일반 로그인
     public PrincipalDetails(User user) {
         this.user = user;
+    }
+
+    // Oauth 로그인
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collects = new ArrayList<>();
+        if(user.getRoles() == null) return collects;
         user.getRoles().forEach(userRole->
 
 //            collects.add(new GrantedAuthority() {
@@ -31,7 +42,12 @@ public class PrincipalDetails implements UserDetails {
             // 위의 코드를 아래의 람다식으로 변경할수 있다
             // 이유는 Collection<GrantedAuthority> collects 로 선언하였으므로
             // 어차피 collects.add 안에 들어갈수 있는 Object는 GrantedAuthority 뿐이므로 추론하여 알수 있다.
-             collects.add(()->userRole.getRole().getName().getValue())
+             collects.add(
+                     ()->userRole
+                             .getRole()
+                             .getName()
+                             .getValue()
+             )
 
         );
         return collects;
@@ -69,5 +85,17 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    /////////////// 아래는 OAuth2User를 Override 하여 구현한것임 /////////////////////////////
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

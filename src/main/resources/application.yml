@@ -33,6 +33,31 @@ spring:
     properties:
       hibernate.format_sql: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            clientId: c42d91eed60095b3e0713a4ee9ce5872 # REST API 키
+            clientSecret: Srtadww6WeY987SDMyoU4tNl9DvYkRRL
+            # [디벨로퍼스] > [내 어플리케이션] > [카카오 로그인] > [보안]에서 확인
+            scope:
+              - profile_nickname
+              - account_email
+              - profile_image
+            clientName: Kakao # 클라이언트 네임은 구글 페이스북도 대문자로 시작함
+            authorizationGrantType: authorization_code
+            redirectUri: http://localhost:8080/login/oauth2/code/kakao # google, facebook, twitter 은 기본 provider 이므로 redirect-uri 가 기본으로 고정되어 있지만 이것은 없으므로 수동으로 등록해야 함
+            clientAuthenticationMethod: POST
+
+        provider:
+          kakao:
+            authorizationUri: https://kauth.kakao.com/oauth/authorize # /oauth2/authorization/kakao 를 이용하여 로그인창을 열려고 할때 최종 호출되어지는 로그인페이지 주소
+            tokenUri: https://kauth.kakao.com/oauth/token
+            userInfoUri: https://kapi.kakao.com/v2/user/me
+            userInfoAuthenticationMethod: POST
+            userNameAttribute: id # 회원정보를 json으로 받을때 id 키값으로 kakao가 리턴해줌
+
 #  devtools:
 #    restart:
 #      enabled: false

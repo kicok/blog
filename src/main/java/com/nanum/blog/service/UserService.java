@@ -12,6 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 @Service
 public class UserService {
@@ -28,24 +32,60 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // 회원 권한 주기
     @Transactional
-    public int join(User user){
-        try{
-            RoleEntity roleEntity =  roleRepository.findByName(RoleType.USER);
+    public UserRole roleMake2(User user, RoleType roleType){
+        if(roleType == null) roleType = RoleType.USER;
+        RoleEntity roleEntity =  roleRepository.findByName(roleType);
+        if(roleEntity == null) { // 기존 Role 테이블에 user 에 관한 role 이 없다면
+            roleEntity = new RoleEntity();
+            roleEntity.setName(roleType);
+        //    roleEntity = roleRepository.save(roleEntity);
+        }
+
+        // userRole 내에 user 와 roleEntity 의 관계를 기록한다.
+        UserRole userRole = new UserRole();
+        userRole.setUser(user);
+        userRole.setRole(roleEntity);
+       // userRoleRepository.save(userRole);
+
+        return userRole;
+    }
+
+    @Transactional
+    public List<UserRole> roleMake(User user, List<RoleType> roleTypes){
+        if(roleTypes == null){
+            roleTypes.add(RoleType.USER);
+        }
+
+        List<UserRole> userRoles = new ArrayList<UserRole>();
+        for( RoleType roleType : roleTypes){
+            RoleEntity roleEntity =  roleRepository.findByName(roleType);
             if(roleEntity == null) { // 기존 Role 테이블에 user 에 관한 role 이 없다면
                 roleEntity = new RoleEntity();
-                roleEntity.setName(RoleType.USER);
+                roleEntity.setName(roleType);
                 roleEntity = roleRepository.save(roleEntity);
             }
-
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user = userRepository.save(user);
 
             // userRole 내에 user 와 roleEntity 의 관계를 기록한다.
             UserRole userRole = new UserRole();
             userRole.setUser(user);
             userRole.setRole(roleEntity);
             userRoleRepository.save(userRole);
+            userRoles.add(userRole);
+        }
+
+        return userRoles;
+    }
+
+    @Transactional
+    public int join(User user){
+        try{
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user = userRepository.save(user);
+
+            // userRole 내에 user 와 roleEntity 의 관계를 기록한다.
+            roleMake(user, new ArrayList(Arrays.asList(RoleType.USER)));
 
             System.out.println(user.toString());
             return 1;
@@ -81,6 +121,10 @@ public class UserService {
 ////       return userRepository.login(user.getUsername(), user.getPassword());
 //       return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
 //    }
+
+    public List<User> allUsers(){
+        return userRepository.findAll();
+    }
 
 
 }

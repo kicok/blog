@@ -1,6 +1,7 @@
 package com.nanum.blog.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nanum.blog.model.common.TimeEntity;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class User extends TimeEntity {
     @Column(nullable = false, length = 30, unique = true)
     private String username;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false, length = 100)
     private String password;
 
@@ -33,6 +35,9 @@ public class User extends TimeEntity {
 
     @Column(nullable = false, length = 30)
     private String nickname;
+
+    private String provider; // google
+    private String provider_id; // google 고유 아이디 (109522245212489089761)
 
 
     /**
