@@ -126,5 +126,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("회원이 존재하지 않습니다."));
+    }
+
 
 }

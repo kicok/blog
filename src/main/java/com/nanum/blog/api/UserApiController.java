@@ -1,12 +1,12 @@
 package com.nanum.blog.api;
 
+import com.nanum.blog.config.auth.PrincipalDetails;
 import com.nanum.blog.dto.ResponseDto;
 import com.nanum.blog.model.User;
 import com.nanum.blog.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +45,24 @@ public class UserApiController {
         // 하지만 세션값은 변경되지 않은 상태이기 때문에 직접 세션값을 변경해야함
         // 세션 등록
 
-        // 아이디와 패스워드로, Security 가 알아 볼 수 있는 token 객체로 변경한다.
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+          //******* 방법 1  : 비밀번호 필수 입력 - 비번이 틀려도 수정되는거 같은 느낌 ***********/
+//        // 아이디와 패스워드로, Security 가 알아 볼 수 있는 token 객체로 변경한다.
+//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+//
+//        // AuthenticationManager 에 token 을 넘기면 UserDetailsService 가 받아 처리하도록 한다.
+//        Authentication authentication = authenticationManager.authenticate(token);
+//
+//        // 실제 SecurityContext 에 authentication 정보를 등록한다.
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // AuthenticationManager 에 token 을 넘기면 UserDetailsService 가 받아 처리하도록 한다.
-        Authentication authentication = authenticationManager.authenticate(token);
+
+        //******* 방법 2 : 비밀번호 없이 수정가능 ***********/
+        User userEntity = userService.findByUsername(user.getUsername());
+
+        // 로그인 세션을 생성할수 있는 PrincipalDetails 객체로 변경한다.
+        PrincipalDetails principalDetails =  new PrincipalDetails(userEntity) ;
+        // username 대신에 principalDetails 를 넣고 , password 를 null 로 입력, principalDetails 는 이미 비번을 알고 있음.
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 
         // 실제 SecurityContext 에 authentication 정보를 등록한다.
         SecurityContextHolder.getContext().setAuthentication(authentication);
